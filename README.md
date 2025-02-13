@@ -1,3 +1,5 @@
+### Work in progress!
+
 # On the Minecraft server:
 Install zabbix-agent2 and copy the Zabbixagent/minestats_agent.conf to the /etc/zabbix/zabbix-agent2.d/ directory, restart the agent.
 Place the minestat.py in /opt/minestats/minestats.py and chmod 0755
