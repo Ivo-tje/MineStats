@@ -1,0 +1,114 @@
+zabbix_export:
+  version: '7.2'
+  template_groups:
+    - uuid: a571c0d144b14fd4a87a9d9b2aa9fcd6
+      name: Templates/Applications
+  templates:
+    - uuid: 0b03e1048e604318834a6b55e477f140
+      template: 'Minecraft player discovery'
+      name: 'Minecraft player discovery'
+      description: |
+        This template is gathering player static using a UserPlugin in the Zabbix agent from a minecraft world.
+        Please look at the documentation: https://github.com/Ivo-tje/MineStats
+      vendor:
+        name: 'Ivo Schooneman'
+        version: 7.0-0
+      groups:
+        - name: Templates/Applications
+      items:
+        - uuid: e1d6074f93c34feb91409e9fb5a63b31
+          name: 'Minecraft world stats json'
+          key: minecraft.world.statics
+          history: '0'
+          value_type: TEXT
+          tags:
+            - tag: execute_now
+            - tag: game
+              value: minecraft
+      discovery_rules:
+        - uuid: 12fa6730c7b74957b0c8d3bcbe52627a
+          name: 'Discover player statistics'
+          type: DEPENDENT
+          key: minecraft.world.statics.discover
+          item_prototypes:
+            - uuid: 4014424deaa34be089f77cb8d4303269
+              name: 'Minecraft Stats - {#PLAYER_NAME} - {#STAT_TYPE} - {#ITEM}'
+              type: DEPENDENT
+              key: 'minecraft.player_stats[{#PLAYER_ID}, {#STAT_TYPE}, {#ITEM}]'
+              preprocessing:
+                - type: JAVASCRIPT
+                  parameters:
+                    - |
+                      // Parse the JSON
+                      var data = JSON.parse(value);
+                      
+                      // Set some vars
+                      var playerId = '{#PLAYER_ID}';  
+                      var statType = '{#STAT_TYPE}';  
+                      var item = '{#ITEM}';   
+                      
+                      // Search players data
+                      var playerStats = data[playerId] && data[playerId].stats;
+                      
+                      if (playerStats && playerStats[statType] && playerStats[statType][item] !== undefined) {
+                          // Return the value 'minecraft:spider'
+                          return playerStats[statType][item];
+                      } else {
+                          // If not found, return 0 (Should never happen)
+                          return 0;
+                      }
+              master_item:
+                key: minecraft.world.statics
+              tags:
+                - tag: game
+                  value: minecraft
+                - tag: Player
+                  value: '{#PLAYER_NAME}'
+                - tag: 'Static item'
+                  value: '{#ITEM}'
+                - tag: 'Static type'
+                  value: '{#STAT_TYPE}'
+          master_item:
+            key: minecraft.world.statics
+          preprocessing:
+            - type: JAVASCRIPT
+              parameters:
+                - |
+                  // Map UID's to names.
+                  var playerNameMapping = {
+                  	"2a1dbf83-849d-4d44-a5c9-9142a456eb94": "Player1",
+                  	"9d85c4a1-56e7-45c7-8a9e-59ed1e1dcb49": "Player2",
+                  	"03b1b47e-0a09-41b2-bf79-99b431572d8b": "Player3"
+                      // Add more when needed
+                  };
+                  
+                  var jsonData = JSON.parse(value);  // 'value' contains the JSON-data from minecraft.world.statics
+                  
+                  var result = [];
+                  
+                  // Loop all players
+                  for (var playerId in jsonData) {
+                      var player = jsonData[playerId];
+                      var playerName = playerNameMapping[playerId] || playerId; // When no name found in map, use the UID
+                      
+                      for (var statType in player.stats) {
+                          var statItems = player.stats[statType];
+                          
+                          for (var item in statItems) {
+                              // Make a list of macro's for all items
+                              result.push({
+                                  "{#PLAYER_ID}": playerId,
+                                  "{#PLAYER_NAME}": playerName,
+                                  "{#STAT_TYPE}": statType,
+                                  "{#ITEM}": item,
+                                  "{#VALUE}": statItems[item]
+                              });
+                          }
+                      }
+                  }
+                  
+                  // Return data for discovery
+                  return JSON.stringify(result);
+      tags:
+        - tag: game
+          value: minecraft
