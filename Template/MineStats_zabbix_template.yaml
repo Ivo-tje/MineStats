@@ -44,8 +44,8 @@ zabbix_export:
                       
                       // Set some vars
                       var playerId = '{#PLAYER_ID}';  
-                      var statType = '{#STAT_TYPE}';  
-                      var item = '{#ITEM}';   
+                      var statType = 'minecraft:' + '{#STAT_TYPE}';  // Add "minecraft:" back
+                      var item = 'minecraft:' + '{#ITEM}';  
                       
                       // Search players data
                       var playerStats = data[playerId] && data[playerId].stats;
@@ -92,15 +92,19 @@ zabbix_export:
                       var playerName = playerNameMapping[playerId] || playerId; // When no name found in map, use the UID
                       
                       for (var statType in player.stats) {
+                  		var cleanedStatType = statType.replace(/^minecraft:/, ""); // Remove "minecraft:" prefix
+                  
                           var statItems = player.stats[statType];
                           
                           for (var item in statItems) {
+                  			var cleanedItem = item.replace(/^minecraft:/, ""); // Remove "minecraft:" prefix
+                  
                               // Make a list of macro's for all items
                               result.push({
                                   "{#PLAYER_ID}": playerId,
                                   "{#PLAYER_NAME}": playerName,
-                                  "{#STAT_TYPE}": statType,
-                                  "{#ITEM}": item,
+                                  "{#STAT_TYPE}": cleanedStatType,
+                                  "{#ITEM}": cleanedItem,
                                   "{#VALUE}": statItems[item]
                               });
                           }
