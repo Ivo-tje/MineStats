@@ -16,3 +16,6 @@ In the preprocessing step, edit the Javascript.
 
 Wait for 2 minutes. or filter in latest data for the tag 'execute_now' to speed up.
 All data will come in and you see hunders of items per player, tagged by player (name or id), "Static type" and "Static item"
+
+
+Keep in mind: The minecraft server will save data once every 5 minutes
