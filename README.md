@@ -7,9 +7,11 @@ Install the required pip packages from requirements.txt
 If you renamed the world or not installed in /opt/minecraft, edit the python script.
 Check your server.properties file to set the following:
 
+'''
 enable-rcon=true
 rcon.password=m1n3cr4ft
 rcon.port=25575
+'''
 
 (A safer password would be great, but you can keep the port firewalled anyway)
 
