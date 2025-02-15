@@ -18,7 +18,7 @@ zabbix_export:
       items:
         - uuid: e1d6074f93c34feb91409e9fb5a63b31
           name: 'Minecraft world stats json'
-          key: minecraft.world.statics
+          key: 'minecraft.world.statics[{$MINECRAFT.SERVER.IP},{$MINECRAFT.SERVER.RCONPORT},{$MINECRAFT.SERVER.RCONPASSWORD}]'
           history: '0'
           value_type: TEXT
           tags:
@@ -58,18 +58,18 @@ zabbix_export:
                           return 0;
                       }
               master_item:
-                key: minecraft.world.statics
+                key: 'minecraft.world.statics[{$MINECRAFT.SERVER.IP},{$MINECRAFT.SERVER.RCONPORT},{$MINECRAFT.SERVER.RCONPASSWORD}]'
               tags:
                 - tag: game
                   value: minecraft
+                - tag: Item
+                  value: '{#ITEM}'
                 - tag: Player
                   value: '{#PLAYER_NAME}'
-                - tag: 'Static item'
-                  value: '{#ITEM}'
-                - tag: 'Static type'
+                - tag: Type
                   value: '{#STAT_TYPE}'
           master_item:
-            key: minecraft.world.statics
+            key: 'minecraft.world.statics[{$MINECRAFT.SERVER.IP},{$MINECRAFT.SERVER.RCONPORT},{$MINECRAFT.SERVER.RCONPASSWORD}]'
           preprocessing:
             - type: JAVASCRIPT
               parameters:
@@ -116,3 +116,10 @@ zabbix_export:
       tags:
         - tag: game
           value: minecraft
+      macros:
+        - macro: '{$MINECRAFT.SERVER.IP}'
+          value: 127.0.0.1
+        - macro: '{$MINECRAFT.SERVER.RCONPASSWORD}'
+          value: m1n3cr4ft
+        - macro: '{$MINECRAFT.SERVER.RCONPORT}'
+          value: '25575'
