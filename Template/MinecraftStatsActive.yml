@@ -1,0 +1,59 @@
+zabbix_export:
+  version: '7.2'
+  template_groups:
+    - uuid: 7df96b18c230490a9a0a9e2307226338
+      name: Templates
+  templates:
+    - uuid: 81070072267441cca39cf730b0d3bb26
+      template: 'Minecraft Stats Active'
+      name: 'Minecraft Stats Active'
+      description: 'Minecraft server status'
+      vendor:
+        name: 'Ivo Schooneman'
+        version: 7.2-0
+      groups:
+        - name: Templates
+      items:
+        - uuid: 68c8b85980af470f8751f8b326193690
+          name: 'Server Latency'
+          key: 'minecraft.server.latency[{$MINECRAFT.SERVER.IP},{$MINECRAFT.SERVER.PORT}]'
+          history: 90d
+          value_type: FLOAT
+          units: s
+          tags:
+            - tag: Application
+              value: Minecraft
+          triggers:
+            - uuid: d9e265bc458c4b8a8f71a09c5c6ac4c6
+              expression: 'last(/Minecraft Stats Active/minecraft.server.latency[{$MINECRAFT.SERVER.IP},{$MINECRAFT.SERVER.PORT}])=0'
+              name: 'Minecraft Server down'
+              priority: HIGH
+        - uuid: 585bf48eb0d74ae1820e6c4f80e72fe8
+          name: 'Server connected users'
+          key: 'minecraft.server.users[{$MINECRAFT.SERVER.IP},{$MINECRAFT.SERVER.PORT}]'
+          history: 90d
+          tags:
+            - tag: Application
+              value: Minecraft
+      macros:
+        - macro: '{$MINECRAFT.SERVER.IP}'
+          value: 127.0.0.1
+          description: 'Ip or dns name for checks. If you have to change this, add this as a macro to your host.'
+        - macro: '{$MINECRAFT.SERVER.PORT}'
+          value: '25565'
+          description: 'The port used for checks. If you have to change this, add this as a macro to your host.'
+  graphs:
+    - uuid: be84d549eaf846839b0e66e5a1036496
+      name: 'Connected Users'
+      graph_items:
+        - color: 1A7C11
+          item:
+            host: 'Minecraft Stats Active'
+            key: 'minecraft.server.users[{$MINECRAFT.SERVER.IP},{$MINECRAFT.SERVER.PORT}]'
+    - uuid: 3368428805734a6ea8b7ea37420777ab
+      name: 'Server Latency'
+      graph_items:
+        - color: CCCCFF
+          item:
+            host: 'Minecraft Stats Active'
+            key: 'minecraft.server.latency[{$MINECRAFT.SERVER.IP},{$MINECRAFT.SERVER.PORT}]'
