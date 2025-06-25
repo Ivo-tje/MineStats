@@ -22,7 +22,6 @@ zabbix_export:
           history: '0'
           value_type: TEXT
           tags:
-            - tag: execute_now
             - tag: game
               value: minecraft
       discovery_rules:
@@ -76,8 +75,13 @@ zabbix_export:
                 - |
                   // Map UID's to names.
                   var playerNameMapping = {
-                  	"2a1dbf83-849d-4d44-a5c9-9142a456eb94": "Player1",
-                  	"9d85c4a1-56e7-45c7-8a9e-59ed1e1dcb49": "Player2",
+                      "8f5fcf3c-5ec0-4b16-9c6e-1b2b35765348": "pOZORjED",
+                      "bb1196d1-0255-4731-938e-9a77ccbb8a1f": "Mara_tje",
+                  	"5a439343-4b17-4fe1-a9c2-dc246ef80743": "TijnGame368",
+                  	"4b55c6ec-ccc4-466d-88da-0135d65ebf48": "BoyGamer1661",
+                  	"57350d2f-4c37-4c80-bcd2-a66ab5c6aa22": "Brammie_2009",
+                  	"bd4f340e-f31d-45c6-9b4e-27d1d660a932": "Jsd0228",
+                  	"ed7f6d9a-f4c8-448c-8648-736fb3c98c38": "BremFari",
                   	"03b1b47e-0a09-41b2-bf79-99b431572d8b": "Player3"
                       // Add more when needed
                   };

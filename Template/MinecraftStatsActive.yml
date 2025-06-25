@@ -20,9 +20,6 @@ zabbix_export:
           history: 90d
           value_type: FLOAT
           units: s
-          tags:
-            - tag: Application
-              value: Minecraft
           triggers:
             - uuid: d9e265bc458c4b8a8f71a09c5c6ac4c6
               expression: 'last(/Minecraft Stats Active/minecraft.server.latency[{$MINECRAFT.SERVER.IP},{$MINECRAFT.SERVER.PORT}])=0'
@@ -32,9 +29,9 @@ zabbix_export:
           name: 'Server connected users'
           key: 'minecraft.server.users[{$MINECRAFT.SERVER.IP},{$MINECRAFT.SERVER.PORT}]'
           history: 90d
-          tags:
-            - tag: Application
-              value: Minecraft
+      tags:
+        - tag: game
+          value: minecraft
       macros:
         - macro: '{$MINECRAFT.SERVER.IP}'
           value: 127.0.0.1
