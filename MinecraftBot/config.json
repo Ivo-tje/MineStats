@@ -1,0 +1,10 @@
+{
+    "discord_token": "<INSERT TOKEN>",
+    "minecraft_server": "minecraft.core.local",
+    "rcon_port": 25575,
+    "rcon_password": "<SECRET>",
+    "minecraft_channel_id": <DISCORD CHANNEL ID>,
+    "zabbix_url": "https://zabbix.core.local/zabbix/api_jsonrpc.php",
+    "api_token": "<ZABBIX API TOKEN>",
+    "zabbix_host": "zabbix.core.local",
+}
